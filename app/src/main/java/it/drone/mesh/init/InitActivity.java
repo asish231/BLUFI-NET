@@ -194,23 +194,6 @@ public class InitActivity extends AppCompatActivity {
         peerCount = binding.peerCount;
         noPeersHint = binding.noPeersHint;
 
-        deviceAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                updatePeerCount();
-            }
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                updatePeerCount();
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                updatePeerCount();
-            }
-        });
-
         try {
             secureMeshProtocol = AndroidMeshSecurity.create(getApplicationContext());
         } catch (GeneralSecurityException exception) {
@@ -327,6 +310,22 @@ public class InitActivity extends AppCompatActivity {
 
         RecyclerView recyclerDeviceList = binding.recyScanResults;
         deviceAdapter = new DeviceAdapter(this);
+        deviceAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updatePeerCount();
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                updatePeerCount();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                updatePeerCount();
+            }
+        });
         recyclerDeviceList.setAdapter(deviceAdapter);
         recyclerDeviceList.setVisibility(View.VISIBLE);
 
@@ -378,19 +377,7 @@ public class InitActivity extends AppCompatActivity {
                 cleanDebug();
                 writeDebug("Service started");
                 if (mBluetoothAdapter == null) {
-                    writeDebug("Running in Emulator Mock Mode");
-                    if (canIBeServer) {
-                        myId.setText("00");
-                        whoAmI.setText(R.string.server);
-                        writeDebug("Mock Server Started (ID: 00)");
-                    } else {
-                        myId.setText("01");
-                        whoAmI.setText(R.string.client);
-                        writeDebug("Mock Client Connected (ID: 01)");
-                    }
-                    sendEmail.setEnabled(true);
-                    sendTweet.setEnabled(true);
-                    binding.browserGo.setEnabled(true);
+                    writeErrorDebug("Bluetooth hardware is not available on this device.");
                     return;
                 }
                 if (Utility.isDeviceOnline(this))
