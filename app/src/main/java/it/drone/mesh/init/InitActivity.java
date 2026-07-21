@@ -826,7 +826,7 @@ public class InitActivity extends AppCompatActivity {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setData(Uri.parse("mailto:" + Uri.encode(destEmail)));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "A message from MeshLink network");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "A message from BLUFI-NET network");
         emailIntent.putExtra(Intent.EXTRA_TEXT, body + "\n\nRelayed for node " + idMitt);
         runOnUiThread(() -> {
             try {
@@ -1165,7 +1165,7 @@ public class InitActivity extends AppCompatActivity {
             java.io.OutputStream output = streamSocket.getOutputStream();
             String httpRequest = "GET " + path + " HTTP/1.1\r\n"
                     + "Host: " + host + "\r\n"
-                    + "User-Agent: MeshLink\r\n"
+                    + "User-Agent: BLUFI-NET\r\n"
                     + "Accept: */*\r\n"
                     + "Connection: close\r\n\r\n";
             output.write(httpRequest.getBytes(StandardCharsets.UTF_8));

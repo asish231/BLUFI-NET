@@ -72,7 +72,7 @@ public class MeshVpnService extends VpnService implements Runnable {
 
     private void setupVpn() throws IOException {
         Builder builder = new Builder();
-        builder.setSession("MeshLink VPN Connection")
+        builder.setSession("BLUFI-NET VPN Connection")
                .setMtu(1500)
                .addAddress("10.0.0.2", 24)
                .addRoute("0.0.0.0", 0)

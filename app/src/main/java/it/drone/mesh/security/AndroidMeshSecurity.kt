@@ -47,7 +47,7 @@ object AndroidMeshSecurity {
     private const val KEYSET_PREFERENCES = "mesh_security_keysets"
     private const val HYBRID_KEYSET_NAME = "gateway_hybrid_keyset"
     private const val SIGNING_KEYSET_NAME = "gateway_signing_keyset"
-    private const val MASTER_KEY_URI = "android-keystore://meshlink_tink_master_key"
+    private const val MASTER_KEY_URI = "android-keystore://blufinet_tink_master_key"
 
     @JvmStatic
     @Throws(GeneralSecurityException::class)
