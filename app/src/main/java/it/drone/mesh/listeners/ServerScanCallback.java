@@ -34,10 +34,14 @@ public class ServerScanCallback extends ScanCallback {
         super.onScanResult(callbackType, result);
 
         for (Server temp : ServerList.getServerList()) {
-            if (temp.getBluetoothDevice().getName().equals(result.getDevice().getName()))
+            if (temp.getBluetoothDevice().getAddress().equals(result.getDevice().getAddress()))
                 return;
         }
-        ServerList.addServer(new Server(result.getDevice(), result.getDevice().getName()));
+        String deviceName = result.getDevice().getName();
+        if (deviceName == null || deviceName.isEmpty()) {
+            deviceName = "Peer " + result.getDevice().getAddress().substring(Math.max(0, result.getDevice().getAddress().length() - 5));
+        }
+        ServerList.addServer(new Server(result.getDevice(), deviceName));
         listener.OnServerFound("New server found");
     }
 

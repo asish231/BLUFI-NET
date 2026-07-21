@@ -903,11 +903,12 @@ public class AcceptBLETask {
             Log.d(TAG, "OUD: " + "startServer: Finding next id");
             initializeId(0);
         } else {
-            setId("1");
+            int randomInitialId = (Math.abs(android.os.Build.MODEL.hashCode() + (int)(System.currentTimeMillis() % 10)) % 14) + 1;
+            setId(String.valueOf(randomInitialId));
             mNode = new ServerNode(id);
             if (Utility.isDeviceOnline(context))
                 mNode.setHasInternet(true);
-            mGattCharacteristicNextServerId.setValue("2".getBytes());
+            mGattCharacteristicNextServerId.setValue(String.valueOf(randomInitialId + 1).getBytes());
             Log.d(TAG, "OUD: startServer: i'm the first");
             routingTable.addDevice(1, 0);
             mGattDescriptorRoutingTable.setValue("1".getBytes());
