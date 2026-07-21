@@ -262,6 +262,8 @@ public class InitActivity extends AppCompatActivity {
         startVpn.setOnClickListener(view -> {
             if (isVpnStarted) {
                 stopVpnService();
+            } else if (wifiDirectGatewayAddress == null && !Utility.isDeviceOnline(this)) {
+                Toast.makeText(this, "Connect to Wi-Fi Direct gateway first to enable system VPN", Toast.LENGTH_LONG).show();
             } else {
                 Intent vpnIntent = android.net.VpnService.prepare(InitActivity.this);
                 if (vpnIntent != null) {
