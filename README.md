@@ -8,7 +8,9 @@ BLUFI-NET is an Android application that enables nearby devices to form a self-o
 
 You can download the pre-built, fully tested BLUFI-NET Android APK directly:
 
-👉 **[Download BLUFI-NET APK (`BLUFI-NET.apk`)](BLUFI-NET.apk)** *(6.3 MB)*
+👉 **[Download BLUFI-NET APK (`BLUFI-NET.apk`)](https://github.com/asish231/BLUFI-NET/raw/main/BLUFI-NET.apk)** *(6.3 MB)*
+
+*(Alternative direct link: [BLUFI-NET.apk](BLUFI-NET.apk))*
 
 *Minimum Android Version:* Android 6.0 (API 23+)  
 *Target Android Version:* Android 17 (API 37)
