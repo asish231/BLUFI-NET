@@ -36,7 +36,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MeshLink"
+                        android:text="BLUFI-NET"
                         android:textColor="@color/colorPrimary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -830,7 +830,7 @@
                     android:id="@+id/noPeersHint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No peers discovered yet. Start the mesh service and stay within 20m of others running MeshLink."
+                    android:text="No peers discovered yet. Start the mesh service and stay within 20m of others running BLUFI-NET."
                     android:textColor="#94A3B8"
                     android:textSize="12sp"
                     android:gravity="center"

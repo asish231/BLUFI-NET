@@ -57,9 +57,9 @@
     <string name="send_message">Send Message</string>
     <string name="tweet_something">Tweet something!</string>
     <string name="compose_email">Compose Email</string>
-    <string name="mesh_permissions_denied">Nearby Bluetooth and Wi-Fi devices permission is required to use MeshLink.</string>
+    <string name="mesh_permissions_denied">Nearby Bluetooth and Wi-Fi devices permission is required to use BLUFI-NET.</string>
     <string name="mesh_service_channel_name">Mesh connection</string>
-    <string name="mesh_service_notification_title">MeshLink is active</string>
+    <string name="mesh_service_notification_title">BLUFI-NET is active</string>
     <string name="mesh_service_notification_text">Advertising and relaying over Bluetooth</string>
     <string name="wifi_direct_tunnel_disconnected">Wi-Fi Direct tunnel: off</string>
     <string name="wifi_direct_tunnel_active">Wi-Fi Direct tunnel: active</string>
