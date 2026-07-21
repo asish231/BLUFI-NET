@@ -153,6 +153,17 @@ public class InitActivity extends AppCompatActivity {
             result -> checkLocationServices()
     );
 
+    private final ActivityResultLauncher<Intent> vpnPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    startVpnService();
+                } else {
+                    writeErrorDebug("VPN permission denied by user");
+                }
+            }
+    );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         long offset = Constants.NO_OFFSET;
@@ -248,6 +259,18 @@ public class InitActivity extends AppCompatActivity {
         startVpn = binding.startVpn;
         startVpn.setEnabled(false);
         startVpn.setText(R.string.wifi_direct_tunnel_disconnected);
+        startVpn.setOnClickListener(view -> {
+            if (isVpnStarted) {
+                stopVpnService();
+            } else {
+                Intent vpnIntent = android.net.VpnService.prepare(InitActivity.this);
+                if (vpnIntent != null) {
+                    vpnPermissionLauncher.launch(vpnIntent);
+                } else {
+                    startVpnService();
+                }
+            }
+        });
 
         wifiDirectManager = WifiDirectManager.getInstance(this);
         wifiDirectConnectionListener = new WifiDirectManager.WifiDirectConnectionListener() {
