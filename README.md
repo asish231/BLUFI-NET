@@ -12,6 +12,7 @@ You can download the pre-built, fully tested BLUFI-NET Android APK directly:
 
 *(Alternative direct link: [BLUFI-NET.apk](BLUFI-NET.apk))*
 
+*Last Updated:* July 21, 2026 (12:51 IST)  
 *Minimum Android Version:* Android 6.0 (API 23+)  
 *Target Android Version:* Android 17 (API 37)
 
