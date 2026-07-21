@@ -92,3 +92,4 @@
 *.tgz   binary
 *.war   binary
 *.zip   binary diff=exif
+*.apk   binary -text
