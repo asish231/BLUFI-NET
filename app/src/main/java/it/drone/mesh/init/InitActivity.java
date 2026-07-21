@@ -258,20 +258,9 @@ public class InitActivity extends AppCompatActivity {
 
         startVpn = binding.startVpn;
         startVpn.setEnabled(false);
-        startVpn.setText(R.string.wifi_direct_tunnel_disconnected);
+        startVpn.setText("System VPN (Use Mesh Browser Below)");
         startVpn.setOnClickListener(view -> {
-            if (isVpnStarted) {
-                stopVpnService();
-            } else if (wifiDirectGatewayAddress == null && !Utility.isDeviceOnline(this)) {
-                Toast.makeText(this, "Connect to Wi-Fi Direct gateway first to enable system VPN", Toast.LENGTH_LONG).show();
-            } else {
-                Intent vpnIntent = android.net.VpnService.prepare(InitActivity.this);
-                if (vpnIntent != null) {
-                    vpnPermissionLauncher.launch(vpnIntent);
-                } else {
-                    startVpnService();
-                }
-            }
+            Toast.makeText(this, "Use Mesh Web Browser below for P2P encrypted internet browsing", Toast.LENGTH_LONG).show();
         });
 
         wifiDirectManager = WifiDirectManager.getInstance(this);
