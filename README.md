@@ -6,9 +6,9 @@ BLUFI-NET is an Android application that enables nearby devices to form a self-o
 
 ## 📥 Download Ready-to-Use APK
 
-You can download the pre-built, fully tested MeshLink Android APK directly:
+You can download the pre-built, fully tested BLUFI-NET Android APK directly:
 
-👉 **[Download MeshLink APK (`app-debug.apk`)](app-debug.apk)** *(6.3 MB)*
+👉 **[Download BLUFI-NET APK (`BLUFI-NET.apk`)](BLUFI-NET.apk)** *(6.3 MB)*
 
 *Minimum Android Version:* Android 6.0 (API 23+)  
 *Target Android Version:* Android 17 (API 37)
