@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -291,8 +292,11 @@ public class Utility {
      */
     public static ScanSettings buildScanSettings() {
         ScanSettings.Builder builder = new ScanSettings.Builder();
-        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
-        //builder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE); // uncomment will work better but wil an high energy consumption
+        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            builder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE);
+            builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
+        }
         return builder.build();
     }
 

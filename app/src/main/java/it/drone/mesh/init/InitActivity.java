@@ -194,6 +194,23 @@ public class InitActivity extends AppCompatActivity {
         peerCount = binding.peerCount;
         noPeersHint = binding.noPeersHint;
 
+        deviceAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updatePeerCount();
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                updatePeerCount();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                updatePeerCount();
+            }
+        });
+
         try {
             secureMeshProtocol = AndroidMeshSecurity.create(getApplicationContext());
         } catch (GeneralSecurityException exception) {
@@ -1195,6 +1212,31 @@ public class InitActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MeshVpnService.class);
         startService(intent);
         writeDebug("Mesh VPN Interface running (routing system traffic to SOCKS5)");
+    }
+
+    private void updatePeerCount() {
+        runOnUiThread(() -> {
+            int count = 0;
+            if (deviceAdapter != null) {
+                count = deviceAdapter.getItemCount();
+            }
+            if (count == 0) {
+                RoutingTable rt = RoutingTable.getInstance();
+                if (rt != null && rt.getDeviceList() != null) {
+                    count = Math.max(0, rt.getDeviceList().size() - 1);
+                }
+            }
+            if (peerCount != null) {
+                peerCount.setText(String.valueOf(count));
+            }
+            if (noPeersHint != null) {
+                if (count > 0) {
+                    noPeersHint.setVisibility(View.GONE);
+                } else {
+                    noPeersHint.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void stopVpnService() {
