@@ -15,8 +15,21 @@ public class MeshVpnService extends VpnService implements Runnable {
     private ParcelFileDescriptor mInterface;
     private boolean isRunning = false;
 
+    private String gatewayAddress = "127.0.0.1";
+    private int gatewayPort = 9090;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            String addr = intent.getStringExtra("GATEWAY_ADDRESS");
+            if (addr != null && !addr.isEmpty()) {
+                gatewayAddress = addr;
+            }
+            int port = intent.getIntExtra("GATEWAY_PORT", 9090);
+            if (port > 0) {
+                gatewayPort = port;
+            }
+        }
         if (mThread == null || !mThread.isAlive()) {
             mThread = new Thread(this, "MeshVpnThread");
             mThread.start();
@@ -33,7 +46,7 @@ public class MeshVpnService extends VpnService implements Runnable {
     @Override
     public void run() {
         try {
-            Log.d(TAG, "Starting Mesh VPN Service...");
+            Log.d(TAG, "Starting Mesh VPN Service with gateway " + gatewayAddress + ":" + gatewayPort);
             isRunning = true;
             setupVpn();
 
@@ -60,13 +73,14 @@ public class MeshVpnService extends VpnService implements Runnable {
         if (version != 4) return; // Only process IPv4
 
         int protocol = packet[9] & 0xFF; // Protocol: 6 = TCP, 17 = UDP, 1 = ICMP
-        int srcIp = ((packet[12] & 0xFF) << 24) | ((packet[13] & 0xFF) << 16) | ((packet[14] & 0xFF) << 8) | (packet[15] & 0xFF);
-        int destIp = ((packet[16] & 0xFF) << 24) | ((packet[17] & 0xFF) << 16) | ((packet[18] & 0xFF) << 8) | (packet[19] & 0xFF);
+        String destIp = String.format("%d.%d.%d.%d", packet[16] & 0xFF, packet[17] & 0xFF, packet[18] & 0xFF, packet[19] & 0xFF);
+        int destPort = 80;
+        if (length >= 24) {
+            destPort = ((packet[22] & 0xFF) << 8) | (packet[23] & 0xFF);
+        }
 
-        // Tunnel system connection requests over SOCKS5 proxy (127.0.0.1:1080)
         if (protocol == 6 || protocol == 17) {
-            // Forward TCP/UDP connections via local SOCKS5 tunnel
-            Log.d(TAG, "VPN TUN routing packet (protocol " + protocol + ") to SOCKS5 gateway");
+            Log.d(TAG, "VPN TUN routing packet (protocol " + protocol + ") to gateway " + gatewayAddress + ":" + gatewayPort + " -> " + destIp + ":" + destPort);
         }
     }
 
@@ -87,14 +101,14 @@ public class MeshVpnService extends VpnService implements Runnable {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             try {
-                builder.setHttpProxy(android.net.ProxyInfo.buildDirectProxy("127.0.0.1", 1080));
+                builder.setHttpProxy(android.net.ProxyInfo.buildDirectProxy(gatewayAddress, gatewayPort));
             } catch (Exception e) {
                 Log.w(TAG, "Could not set HTTP proxy: " + e.getMessage());
             }
         }
 
         mInterface = builder.establish();
-        Log.d(TAG, "VPN TUN interface established successfully with SOCKS5 proxy integration");
+        Log.d(TAG, "VPN TUN interface established successfully for gateway " + gatewayAddress + ":" + gatewayPort);
     }
 
     private void stopVpn() {

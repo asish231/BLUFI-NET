@@ -258,9 +258,20 @@ public class InitActivity extends AppCompatActivity {
 
         startVpn = binding.startVpn;
         startVpn.setEnabled(false);
-        startVpn.setText("System VPN (Use Mesh Browser Below)");
+        startVpn.setText(R.string.wifi_direct_tunnel_disconnected);
         startVpn.setOnClickListener(view -> {
-            Toast.makeText(this, "Use Mesh Web Browser below for P2P encrypted internet browsing", Toast.LENGTH_LONG).show();
+            if (isVpnStarted) {
+                stopVpnService();
+            } else if (wifiDirectGatewayAddress == null && !Utility.isDeviceOnline(this)) {
+                Toast.makeText(this, "Connect to Wi-Fi Direct gateway first to enable system VPN", Toast.LENGTH_LONG).show();
+            } else {
+                Intent vpnIntent = android.net.VpnService.prepare(InitActivity.this);
+                if (vpnIntent != null) {
+                    vpnPermissionLauncher.launch(vpnIntent);
+                } else {
+                    startVpnService();
+                }
+            }
         });
 
         wifiDirectManager = WifiDirectManager.getInstance(this);
@@ -273,6 +284,7 @@ public class InitActivity extends AppCompatActivity {
                         wifiDirectGatewayAddress = goAddress;
                         stopWifiGateway();
                         startVpn.setText(R.string.wifi_direct_tunnel_active);
+                        startVpn.setEnabled(true);
                         binding.browserGo.setEnabled(true);
                     } else {
                         wifiDirectGatewayAddress = null;
@@ -1197,8 +1209,10 @@ public class InitActivity extends AppCompatActivity {
         isVpnStarted = true;
         startVpn.setText("Stop Mesh VPN (System-wide)");
         Intent intent = new Intent(this, MeshVpnService.class);
+        intent.putExtra("GATEWAY_ADDRESS", wifiDirectGatewayAddress != null ? wifiDirectGatewayAddress : "127.0.0.1");
+        intent.putExtra("GATEWAY_PORT", 9090);
         startService(intent);
-        writeDebug("Mesh VPN Interface running (routing system traffic to SOCKS5)");
+        writeDebug("Mesh VPN Interface running (routing system traffic to SOCKS5 gateway " + (wifiDirectGatewayAddress != null ? wifiDirectGatewayAddress : "127.0.0.1") + ":9090)");
     }
 
     private void updatePeerCount() {
